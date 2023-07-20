@@ -1,0 +1,16 @@
+../Src/main.c:33:5:main	8	static
+../Src/main.c:58:6:task1	8	static
+../Src/main.c:63:6:task2	8	static
+../Src/main.c:68:6:task3	8	static
+../Src/main.c:73:6:task4	8	static
+../Src/main.c:79:6:init_systick_timer	32	static
+../Src/main.c:96:6:SysTick_Handler	8	static
+../Src/main.c:100:29:init_schedular_stack	0	static,ignoring_inline_asm
+../Src/main.c:106:6:init_task_stack	24	static
+../Src/main.c:130:6:enable_processor_faults	16	static
+../Src/main.c:139:6:HardFault_Handler	8	static
+../Src/main.c:143:6:MemManage_Handler	8	static
+../Src/main.c:147:6:BusFault_Handler	8	static
+../Src/main.c:151:6:UsageFault_Handler	8	static
+../Src/main.c:157:10:get_psp_value	4	static
+../Src/main.c:161:29:switch_sp_to_psp	0	static,ignoring_inline_asm
