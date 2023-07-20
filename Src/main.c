@@ -24,33 +24,27 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-
-
-uint32_t psp_of_tasks[MAX_TASKS] = {TASK1_START, TASK2_START, TASK3_START, TASK4_START};
-uint32_t task_handlers[MAX_TASKS];
-uint8_t current_task = 0; //task 1 is running
-
-int main(void)
-{
+int main(void){
 	enable_processor_faults();
 
-	//init schedular stack
+	//Initialization of the scheduler stack
 	init_schedular_stack(SCHED_STACK_START);
 
-	//array filling capture addresses
+	//Array filling capture addresses of tasks
 	task_handlers[0] = (uint32_t)task1;
 	task_handlers[1] = (uint32_t)task2;
 	task_handlers[2] = (uint32_t)task3;
 	task_handlers[3] = (uint32_t)task4;
 
-	//dummy frames
+	//Initialization of the task stack with dummy frames.
 	init_task_stack();
 
+	//Initialization of the SysTick timer
 	init_systick_timer(TICK_HZ);
 
 	switch_sp_to_psp();
 
-	task1();
+	task1(); //Call task1
 
 	while(1);
 }
@@ -76,6 +70,52 @@ void task4(void){
 		}
 }
 
+void SysTick_Handler(void){
+
+	/* SAVE the Current TASK */
+
+	// get current's task PSP value
+	__asm volatile("MRS R0, PSP");
+	//using the PSP value, store the remaining registers ( stack frame 2 )
+	__asm volatile("STMDB R0!, {R4-R11}");
+	//Save the current PSP Value
+	__asm volatile("BL save_psp_value");
+
+	/* Retrieve the next TASK */
+
+	//Decide next TASK to RUN
+	__asm volatile("BL update_next_task");
+
+	//Get the PAST PSP VALUE
+	__asm volatile("BL get_psp_value");
+	/*Note: Register R0 will automatically get the value of PSP*/
+
+	//Using that PSP value, retrieve the Rest of the stack frame ( R4 - R11 )
+	__asm volatile("LDMIA R0!,{R4-R11}");
+
+	__asm volatile("MSR R0, PSP");
+
+}
+
+//Implement the fault handlers
+void HardFault_Handler(void){
+	printf("HardFault \n");
+	while(1);
+}
+void MemManage_Handler(void){
+	printf("MemManage \n");
+	while(1);
+}
+void BusFault_Handler(void){
+	printf("BusFault \n");
+	while(1);
+}
+void UsageFault_Handler(void){
+	printf("UsageFault \n");
+	while(1);
+}
+
+
 void init_systick_timer(uint32_t tick_hz){
 	uint32_t *pSYST_RVR = (uint32_t *) 0xE000E014;
 	uint32_t *pSYST_CSR = (uint32_t *) 0xE000E010;
@@ -91,10 +131,6 @@ void init_systick_timer(uint32_t tick_hz){
 	*pSYST_CSR |= (1<<1); //Enables SysTick exception request
 	*pSYST_CSR |= (1<<2); //Indicates the clock source, processor clock source
 	*pSYST_CSR |= (1<<0); // Enables the counter
-}
-
-void SysTick_Handler(void){
-	printf("SysTick_Handler \n");
 }
 
 __attribute__((naked)) void init_schedular_stack(uint32_t sched_top_of_stack){
@@ -135,27 +171,17 @@ void enable_processor_faults(void){
 
 }
 
-//impliment the fault handlers
-void HardFault_Handler(void){
-	printf("HardFault \n");
-	while(1);
+void save_psp_value(uint32_t current_psp_value){
+	psp_of_tasks[current_task] = current_psp_value;
 }
-void MemManage_Handler(void){
-	printf("MemManage \n");
-	while(1);
-}
-void BusFault_Handler(void){
-	printf("BusFault \n");
-	while(1);
-}
-void UsageFault_Handler(void){
-	printf("UsageFault \n");
-	while(1);
-}
-
 
 uint32_t get_psp_value(void){
 	return psp_of_tasks[current_task];
+}
+
+void update_next_task(void){
+	current_task++;
+	current_task %= MAX_TASKS;
 }
 
 __attribute__((naked)) void switch_sp_to_psp(void){
