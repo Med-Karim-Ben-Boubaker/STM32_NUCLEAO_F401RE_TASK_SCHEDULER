@@ -20,9 +20,16 @@
 #include <stdio.h>
 #include "main.h"
 
+
+
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
+
+// GLOBAL VARIABLES
+uint32_t psp_of_tasks[MAX_TASKS] = {TASK1_START, TASK2_START, TASK3_START, TASK4_START};
+uint32_t task_handlers[MAX_TASKS];
+uint8_t current_task = 0; //task 1 is running
 
 int main(void){
 	enable_processor_faults();
@@ -93,7 +100,7 @@ void SysTick_Handler(void){
 	//Using that PSP value, retrieve the Rest of the stack frame ( R4 - R11 )
 	__asm volatile("LDMIA R0!,{R4-R11}");
 
-	__asm volatile("MSR R0, PSP");
+	__asm volatile("MRS R0, PSP");
 
 }
 

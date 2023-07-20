@@ -33,34 +33,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := TASK_SCHEDULER
+BUILD_ARTIFACT_NAME := STM32_NUCLEAO_F401RE_TASK_SCHEDULER
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-TASK_SCHEDULER.elf \
+STM32_NUCLEAO_F401RE_TASK_SCHEDULER.elf \
 
 MAP_FILES += \
-TASK_SCHEDULER.map \
+STM32_NUCLEAO_F401RE_TASK_SCHEDULER.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-TASK_SCHEDULER.list \
+STM32_NUCLEAO_F401RE_TASK_SCHEDULER.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: TASK_SCHEDULER.elf secondary-outputs
+main-build: STM32_NUCLEAO_F401RE_TASK_SCHEDULER.elf secondary-outputs
 
 # Tool invocations
-TASK_SCHEDULER.elf TASK_SCHEDULER.map: $(OBJS) $(USER_OBJS) C:\Users\user\Downloads\Embedded-C\My_workspace\target\TASK_SCHEDULER\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "TASK_SCHEDULER.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\user\Downloads\Embedded-C\My_workspace\target\TASK_SCHEDULER\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TASK_SCHEDULER.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+STM32_NUCLEAO_F401RE_TASK_SCHEDULER.elf STM32_NUCLEAO_F401RE_TASK_SCHEDULER.map: $(OBJS) $(USER_OBJS) C:\Users\user\Downloads\Embedded-C\My_workspace\target\STM32_NUCLEAO_F401RE_TASK_SCHEDULER\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32_NUCLEAO_F401RE_TASK_SCHEDULER.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\user\Downloads\Embedded-C\My_workspace\target\STM32_NUCLEAO_F401RE_TASK_SCHEDULER\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32_NUCLEAO_F401RE_TASK_SCHEDULER.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,14 +69,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-TASK_SCHEDULER.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "TASK_SCHEDULER.list"
+STM32_NUCLEAO_F401RE_TASK_SCHEDULER.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "STM32_NUCLEAO_F401RE_TASK_SCHEDULER.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) TASK_SCHEDULER.elf TASK_SCHEDULER.list TASK_SCHEDULER.map default.size.stdout
+	-$(RM) STM32_NUCLEAO_F401RE_TASK_SCHEDULER.elf STM32_NUCLEAO_F401RE_TASK_SCHEDULER.list STM32_NUCLEAO_F401RE_TASK_SCHEDULER.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

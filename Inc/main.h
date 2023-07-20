@@ -51,11 +51,8 @@ __attribute__((naked)) void switch_sp_to_psp(void);
 void save_psp_value(uint32_t);
 
 //Update the next task
-void update_next_task(void)
+void update_next_task(void);
 
-// GLOBAL VARIABLES
-uint32_t psp_of_tasks[MAX_TASKS] = {TASK1_START, TASK2_START, TASK3_START, TASK4_START};
-uint32_t task_handlers[MAX_TASKS];
-uint8_t current_task = 0; //task 1 is running
+
 
 #endif /* MAIN_H_ */
