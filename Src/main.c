@@ -77,14 +77,19 @@ void task4(void){
 		}
 }
 
-void SysTick_Handler(void){
+__attribute__((naked)) void SysTick_Handler(void){
 
 	/* SAVE the Current TASK */
 
 	// get current's task PSP value
 	__asm volatile("MRS R0, PSP");
+
 	//using the PSP value, store the remaining registers ( stack frame 2 )
 	__asm volatile("STMDB R0!, {R4-R11}");
+
+	//SAVE the return LR
+	__asm volatile("PUSH {LR}");
+
 	//Save the current PSP Value
 	__asm volatile("BL save_psp_value");
 
@@ -101,6 +106,8 @@ void SysTick_Handler(void){
 	__asm volatile("LDMIA R0!,{R4-R11}");
 
 	__asm volatile("MRS R0, PSP");
+
+
 
 }
 
@@ -155,7 +162,7 @@ void init_task_stack(void){
 		*pPSP = DUMMY_XPSR; //0x01000000
 
 		pPSP--; //PC
-		*pPSP = task_handlers[i];
+		*pPSP = task_handlers[i]; //the address of the task handler must be odd
 
 		pPSP--; //LR
 		*pPSP = 0xFFFFFFFD;

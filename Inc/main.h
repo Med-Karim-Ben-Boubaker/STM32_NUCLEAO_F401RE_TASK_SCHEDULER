@@ -11,16 +11,15 @@
 //GLOBAL DEFINITIONS
 #define MAX_TASKS			4
 #define SRAM_ADDRESS 			0x20000000U
-#define SRAM_SIZE			( (128)*(1024) )
+#define SRAM_SIZE			( (64) * (1024) )
 #define SRAM_END			( (SRAM_ADDRESS) + (SRAM_SIZE) )
-#define STACK_START			SRAM_END
 
 #define TASK_SIZE			1024U
-#define TASK1_START			STACK_START
-#define TASK2_START			( (STACK_START) - (1 * TASK_SIZE) )
-#define TASK3_START			( (STACK_START) - (2 * TASK_SIZE) )
-#define TASK4_START			( (STACK_START) - (3 * TASK_SIZE) )
-#define SCHED_STACK_START	( (STACK_START) - (4 * TASK_SIZE) )
+#define TASK1_START			SRAM_END
+#define TASK2_START			( (SRAM_END) - (1 * TASK_SIZE) )
+#define TASK3_START			( (SRAM_END) - (2 * TASK_SIZE) )
+#define TASK4_START			( (SRAM_END) - (3 * TASK_SIZE) )
+#define SCHED_STACK_START	( (SRAM_END) - (4 * TASK_SIZE) )
 
 #define TICK_HZ				1000U //Desired switching frequency
 #define SYSTICK_TIM_CLK		16000000U
